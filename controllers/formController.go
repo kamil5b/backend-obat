@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/kamil5b/backend-template/models"
+	"github.com/kamil5b/backend-template/repositories"
 	"github.com/kamil5b/backend-template/utilities"
 )
 
@@ -39,7 +39,7 @@ func PostForm(c *fiber.Ctx) error { //POST
 	msg := data["username"] + " mendaftar"
 	utilities.WriteLog(log, IP, msg)
 	data["url_voice"] = fmt.Sprintf("../storage/record/%s", recording.Filename)
-	err = models.CreateForm(data, dataint, IP)
+	err = repositories.CreateForm(data, dataint, IP)
 	if err != nil {
 		c.Status(fiber.StatusInternalServerError)
 		msg = data["id_student"] + " " + err.Error()
@@ -66,7 +66,7 @@ func PostForm(c *fiber.Ctx) error { //POST
 }
 
 func GetAllForms(c *fiber.Ctx) error { //GET
-	forms, err := models.GetAllForms()
+	forms, err := repositories.GetAllForms()
 	if err != nil {
 		return c.JSON(fiber.Map{
 			"message": err.Error(),
@@ -89,7 +89,7 @@ func GetFormByID(c *fiber.Ctx) error { //POST
 	}
 	dataint := utilities.MapStringToInt(data)
 
-	form, err := models.GetForm(dataint["id"])
+	form, err := repositories.GetForm(dataint["id"])
 	if err != nil {
 		return c.JSON(fiber.Map{
 			"message": err.Error(),
@@ -113,7 +113,7 @@ func GetFormByStudent(c *fiber.Ctx) error { //POST
 	}
 	dataint := utilities.MapStringToInt(data)
 
-	form, err := models.GetFormStudent(dataint["id_student"])
+	form, err := repositories.GetFormStudent(dataint["id_student"])
 	if err != nil {
 		return c.JSON(fiber.Map{
 			"message": err.Error(),
@@ -137,7 +137,7 @@ func GetFormByTeacher(c *fiber.Ctx) error { //POST
 	}
 	dataint := utilities.MapStringToInt(data)
 
-	forms, err := models.GetFormTeacher(dataint["id_teacher"])
+	forms, err := repositories.GetFormTeacher(dataint["id_teacher"])
 	if err != nil {
 		return c.JSON(fiber.Map{
 			"message": err.Error(),

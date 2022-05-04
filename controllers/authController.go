@@ -6,7 +6,7 @@ import (
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gofiber/fiber/v2"
-	"github.com/kamil5b/backend-template/models"
+	"github.com/kamil5b/backend-template/repositories"
 	"github.com/kamil5b/backend-template/utilities"
 )
 
@@ -29,7 +29,7 @@ func RegisterUser(c *fiber.Ctx) error { //POST
 	msg := data["username"] + " mendaftar"
 	utilities.WriteLog(log, IP, msg)
 	dataint := utilities.MapStringToInt(data)
-	err := models.CreateUser(data, dataint, IP)
+	err := repositories.CreateUser(data, dataint, IP)
 	if err != nil {
 		c.Status(400)
 		return c.JSON(fiber.Map{
@@ -60,7 +60,7 @@ func LoginUser(c *fiber.Ctx) error { //POST
 	msg := data["username"] + " mencoba untuk login"
 	utilities.WriteLog(log, IP, msg)
 	password := utilities.HashKamil(data["password"])
-	user, err := models.GetModelUser("username = ? and password = ?", data["username"], password)
+	user, err := repositories.GetModelUser("username = ? and password = ?", data["username"], password)
 	if err != nil {
 		msg = data["username"] + " " + err.Error()
 		utilities.WriteLog(log, IP, msg)

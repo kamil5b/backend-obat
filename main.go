@@ -5,17 +5,12 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/kamil5b/backend-template/database"
-	"github.com/kamil5b/backend-template/models"
 	"github.com/kamil5b/backend-template/routes"
 	"github.com/kamil5b/backend-template/utilities"
 )
 
-func main() {
-	database.Connect(
-		&models.Item,
-		&models.Subitem,
-		&models.User,
-	)
+func SetupTemplate(serverurl string) {
+	database.Connect()
 	app := fiber.New()
 	/*
 		origin := utilities.GoDotEnvVariable("VIEW_URL") //ganti view url ini di .env
@@ -26,11 +21,16 @@ func main() {
 		}))
 	*/
 	routes.Setup(app)
-	serverurl := utilities.GoDotEnvVariable("SERVER_URL")
 
 	err := app.Listen(serverurl)
 	if err != nil {
 		fmt.Println(err)
 		fmt.Scan()
 	}
+}
+
+func main() {
+	//CREATE MORE THAN 1 SERVER GAIS!!!
+	go SetupTemplate(utilities.GoDotEnvVariable("SERVER_URL"))
+	SetupTemplate("127.0.0.1:8080")
 }

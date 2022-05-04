@@ -6,12 +6,12 @@ import (
 	"github.com/kamil5b/backend-template/utilities"
 )
 
-func GetItems(c *fiber.Ctx) error { //GET
+func GetSubitems(c *fiber.Ctx) error { //GET
 	IP := c.IP()
 	log := utilities.GoDotEnvVariable("LOG")
 	msg := "Get all item"
 	utilities.WriteLog(log, IP, msg)
-	items, err := repositories.GetAllItems()
+	items, err := repositories.GetAllSubitems()
 	if err != nil {
 		utilities.WriteLog(log, IP, err.Error())
 		c.Status(400)
@@ -27,7 +27,7 @@ func GetItems(c *fiber.Ctx) error { //GET
 	})
 }
 
-func CreateItem(c *fiber.Ctx) error { //POST
+func CreateSubitem(c *fiber.Ctx) error { //POST
 	var data map[string]string
 	/*
 		value : hash
@@ -38,7 +38,7 @@ func CreateItem(c *fiber.Ctx) error { //POST
 	dataint := utilities.MapStringToInt(data)
 	IP := c.IP()
 	log := utilities.GoDotEnvVariable("LOG")
-	err := repositories.CreateItem(data, dataint, IP)
+	err := repositories.CreateSubitem(data, dataint, IP)
 	if err != nil {
 		utilities.WriteLog(log, IP, err.Error())
 		c.Status(400)
@@ -53,7 +53,7 @@ func CreateItem(c *fiber.Ctx) error { //POST
 	})
 }
 
-func DeleteItem(c *fiber.Ctx) error { //DELETE
+func DeleteSubitem(c *fiber.Ctx) error { //DELETE
 	var data map[string]string
 	if err := c.BodyParser(&data); err != nil {
 		return err
@@ -61,7 +61,7 @@ func DeleteItem(c *fiber.Ctx) error { //DELETE
 	dataint := utilities.MapStringToInt(data)
 	IP := c.IP()
 	log := utilities.GoDotEnvVariable("LOG")
-	err := repositories.DeleteItem(data, dataint, IP)
+	err := repositories.DeleteSubitem(data, dataint, IP)
 	if err != nil {
 		utilities.WriteLog(log, IP, err.Error())
 		c.Status(400)
@@ -76,7 +76,7 @@ func DeleteItem(c *fiber.Ctx) error { //DELETE
 	})
 }
 
-func UpdateItem(c *fiber.Ctx) error { //UPDATE
+func UpdateSubitem(c *fiber.Ctx) error { //UPDATE
 	var data map[string]string
 	if err := c.BodyParser(&data); err != nil {
 		return err
@@ -84,7 +84,7 @@ func UpdateItem(c *fiber.Ctx) error { //UPDATE
 	dataint := utilities.MapStringToInt(data)
 	IP := c.IP()
 	log := utilities.GoDotEnvVariable("LOG")
-	err := repositories.UpdateItem(data, dataint, IP)
+	err := repositories.UpdateSubitem(data, dataint, IP)
 	if err != nil {
 		utilities.WriteLog(log, IP, err.Error())
 		c.Status(400)
@@ -99,7 +99,7 @@ func UpdateItem(c *fiber.Ctx) error { //UPDATE
 	})
 }
 
-func GetItemByID(c *fiber.Ctx) error { //POST
+func GetSubitemByID(c *fiber.Ctx) error { //POST
 	var data map[string]string
 	/*
 		value : hash
@@ -111,7 +111,7 @@ func GetItemByID(c *fiber.Ctx) error { //POST
 	IP := c.IP()
 	log := utilities.GoDotEnvVariable("LOG")
 	//IP := c.IP()
-	item, err := repositories.GetAnItem("ID = ?", dataint["id"])
+	item, err := repositories.GetASubitem("ID = ?", dataint["id"])
 	if err != nil {
 		utilities.WriteLog(log, IP, err.Error())
 		c.Status(400)
@@ -127,7 +127,7 @@ func GetItemByID(c *fiber.Ctx) error { //POST
 	})
 }
 
-func GetItemsByName(c *fiber.Ctx) error { //POST
+func GetSubitemsByName(c *fiber.Ctx) error { //POST
 	var data map[string]string
 	/*
 		value : hash
@@ -138,7 +138,7 @@ func GetItemsByName(c *fiber.Ctx) error { //POST
 	//IP := c.IP()
 	IP := c.IP()
 	log := utilities.GoDotEnvVariable("LOG")
-	items, err := repositories.GetAnItem("name = ?", data["name"])
+	items, err := repositories.GetASubitem("name = ?", data["name"])
 	if err != nil {
 		utilities.WriteLog(log, IP, err.Error())
 		c.Status(400)
