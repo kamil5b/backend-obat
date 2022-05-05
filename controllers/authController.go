@@ -26,6 +26,13 @@ func RegisterUser(c *fiber.Ctx) error { //POST
 
 	IP := c.IP()
 	log := utilities.GoDotEnvVariable("LOG")
+	if !IsAuthorized(c.Params("auth"), SecretKey) {
+		utilities.WriteLog(log, IP, "unauthorized")
+		c.Status(401)
+		return c.JSON(fiber.Map{
+			"message": "Unauthorized",
+		})
+	}
 	msg := data["username"] + " mendaftar"
 	utilities.WriteLog(log, IP, msg)
 	dataint := utilities.MapStringToInt(data)
@@ -57,6 +64,13 @@ func LoginUser(c *fiber.Ctx) error { //POST
 	}
 	IP := c.IP()
 	log := utilities.GoDotEnvVariable("LOG")
+	if !IsAuthorized(c.Params("auth"), SecretKey) {
+		utilities.WriteLog(log, IP, "unauthorized")
+		c.Status(401)
+		return c.JSON(fiber.Map{
+			"message": "Unauthorized",
+		})
+	}
 	msg := data["username"] + " mencoba untuk login"
 	utilities.WriteLog(log, IP, msg)
 	password := utilities.HashKamil(data["password"])
@@ -106,10 +120,22 @@ func LoginUser(c *fiber.Ctx) error { //POST
 	})
 }
 
+func IsAuthorized(cookie, SecretKey string) bool {
+	_, err := repositories.DecodeJWT(cookie, SecretKey)
+	return err != nil
+}
+
 /*
 
 func Login(data map[string]string, dataint map[string]int, IP string, SecretKey string) (string, int) {
 	log := utilities.GoDotEnvVariable("LOG")
+	if !IsAuthorized(c.Params("auth"), SecretKey) {
+		utilities.WriteLog(log, IP, "unauthorized")
+		c.Status(401)
+		return c.JSON(fiber.Map{
+			"message": "Unauthorized",
+		})
+	}
 	msg := data["username"] + " mencoba untuk login"
 	utilities.WriteLog(log, IP, msg)
 	password := utilities.HashKamil(data["password"])

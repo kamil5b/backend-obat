@@ -33,12 +33,25 @@ func PostForm(c *fiber.Ctx) error { //POST
 		return err
 	}
 
+	image, err := c.FormFile("image")
+	if err != nil {
+		return err
+	}
 	dataint := utilities.MapStringToInt(data)
 	IP := c.IP()
 	log := utilities.GoDotEnvVariable("LOG")
+	if !IsAuthorized(c.Params("auth"), SecretKey) {
+		utilities.WriteLog(log, IP, "unauthorized")
+		c.Status(401)
+		return c.JSON(fiber.Map{
+			"message": "Unauthorized",
+		})
+	}
 	msg := data["username"] + " mendaftar"
 	utilities.WriteLog(log, IP, msg)
+
 	data["url_voice"] = fmt.Sprintf("../storage/record/%s", recording.Filename)
+	data["url_image"] = fmt.Sprintf("../storage/images/%s", image.Filename)
 	err = repositories.CreateForm(data, dataint, IP)
 	if err != nil {
 		c.Status(fiber.StatusInternalServerError)
@@ -48,6 +61,7 @@ func PostForm(c *fiber.Ctx) error { //POST
 			"message": err.Error(),
 		})
 	}
+	//SAVE VOICE
 	err = c.SaveFile(recording, data["url_voice"])
 	if err != nil {
 		c.Status(fiber.StatusInternalServerError)
@@ -57,12 +71,22 @@ func PostForm(c *fiber.Ctx) error { //POST
 			"message": err.Error(),
 		})
 	}
+	//SAVE IMAGE
+	err = c.SaveFile(image, data["url_image"])
+	if err != nil {
+		c.Status(fiber.StatusInternalServerError)
+		msg = data["id_student"] + " " + err.Error()
+		utilities.WriteLog(log, IP, msg)
+		return c.JSON(fiber.Map{
+			"message": err.Error(),
+		})
+	}
+
 	msg = data["id_student"] + " berhasil form"
 	utilities.WriteLog(log, IP, msg)
 	return c.JSON(fiber.Map{
 		"message": "success",
 	})
-
 }
 
 func GetAllForms(c *fiber.Ctx) error { //GET

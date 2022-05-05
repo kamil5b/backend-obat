@@ -7,15 +7,10 @@ import (
 )
 
 func PostUser(c *fiber.Ctx) error { //POST
-	var data map[string]string
-
-	if err := c.BodyParser(&data); err != nil {
-		return err
-	}
-
+	auth := c.Params("auth")
 	IP := c.IP()
 	log := utilities.GoDotEnvVariable("LOG")
-	user, err := repositories.DecodeJWT(data["value"], SecretKey)
+	user, err := repositories.DecodeJWT(auth, SecretKey)
 	if err != nil {
 		utilities.WriteLog(log, IP, "Gagal login")
 		c.Status(400)

@@ -9,6 +9,13 @@ import (
 func GetItems(c *fiber.Ctx) error { //GET
 	IP := c.IP()
 	log := utilities.GoDotEnvVariable("LOG")
+	if !IsAuthorized(c.Params("auth"), SecretKey) {
+		utilities.WriteLog(log, IP, "unauthorized")
+		c.Status(401)
+		return c.JSON(fiber.Map{
+			"message": "Unauthorized",
+		})
+	}
 	msg := "Get all item"
 	utilities.WriteLog(log, IP, msg)
 	items, err := repositories.GetAllItems()
@@ -38,6 +45,13 @@ func CreateItem(c *fiber.Ctx) error { //POST
 	dataint := utilities.MapStringToInt(data)
 	IP := c.IP()
 	log := utilities.GoDotEnvVariable("LOG")
+	if !IsAuthorized(c.Params("auth"), SecretKey) {
+		utilities.WriteLog(log, IP, "unauthorized")
+		c.Status(401)
+		return c.JSON(fiber.Map{
+			"message": "Unauthorized",
+		})
+	}
 	err := repositories.CreateItem(data, dataint, IP)
 	if err != nil {
 		utilities.WriteLog(log, IP, err.Error())
@@ -61,6 +75,13 @@ func DeleteItem(c *fiber.Ctx) error { //DELETE
 	dataint := utilities.MapStringToInt(data)
 	IP := c.IP()
 	log := utilities.GoDotEnvVariable("LOG")
+	if !IsAuthorized(c.Params("auth"), SecretKey) {
+		utilities.WriteLog(log, IP, "unauthorized")
+		c.Status(401)
+		return c.JSON(fiber.Map{
+			"message": "Unauthorized",
+		})
+	}
 	err := repositories.DeleteItem(data, dataint, IP)
 	if err != nil {
 		utilities.WriteLog(log, IP, err.Error())
@@ -84,6 +105,13 @@ func UpdateItem(c *fiber.Ctx) error { //UPDATE
 	dataint := utilities.MapStringToInt(data)
 	IP := c.IP()
 	log := utilities.GoDotEnvVariable("LOG")
+	if !IsAuthorized(c.Params("auth"), SecretKey) {
+		utilities.WriteLog(log, IP, "unauthorized")
+		c.Status(401)
+		return c.JSON(fiber.Map{
+			"message": "Unauthorized",
+		})
+	}
 	err := repositories.UpdateItem(data, dataint, IP)
 	if err != nil {
 		utilities.WriteLog(log, IP, err.Error())
@@ -110,6 +138,13 @@ func GetItemByID(c *fiber.Ctx) error { //POST
 	dataint := utilities.MapStringToInt(data)
 	IP := c.IP()
 	log := utilities.GoDotEnvVariable("LOG")
+	if !IsAuthorized(c.Params("auth"), SecretKey) {
+		utilities.WriteLog(log, IP, "unauthorized")
+		c.Status(401)
+		return c.JSON(fiber.Map{
+			"message": "Unauthorized",
+		})
+	}
 	//IP := c.IP()
 	item, err := repositories.GetAnItem("ID = ?", dataint["id"])
 	if err != nil {
@@ -138,6 +173,13 @@ func GetItemsByName(c *fiber.Ctx) error { //POST
 	//IP := c.IP()
 	IP := c.IP()
 	log := utilities.GoDotEnvVariable("LOG")
+	if !IsAuthorized(c.Params("auth"), SecretKey) {
+		utilities.WriteLog(log, IP, "unauthorized")
+		c.Status(401)
+		return c.JSON(fiber.Map{
+			"message": "Unauthorized",
+		})
+	}
 	items, err := repositories.GetAnItem("name = ?", data["name"])
 	if err != nil {
 		utilities.WriteLog(log, IP, err.Error())
