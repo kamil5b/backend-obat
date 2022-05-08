@@ -26,7 +26,9 @@ func PostForm(c *fiber.Ctx) error { //POST
 	*/
 	var data map[string]string
 	if err := c.BodyParser(&data); err != nil {
-		return err
+		return c.JSON(fiber.Map{
+			"message": err.Error(),
+		})
 	}
 	recording, err := c.FormFile("wavfile")
 	if err != nil {

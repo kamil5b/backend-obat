@@ -22,7 +22,9 @@ func RegisterUser(c *fiber.Ctx) error { //POST
 	*/
 
 	if err := c.BodyParser(&data); err != nil {
-		return err
+		return c.JSON(fiber.Map{
+			"message": err.Error(),
+		})
 	}
 
 	IP := c.IP()
@@ -98,7 +100,9 @@ func LoginUser(c *fiber.Ctx) error { //POST
 
 	*/
 	if err := c.BodyParser(&data); err != nil {
-		return err
+		return c.JSON(fiber.Map{
+			"message": err.Error(),
+		})
 	}
 	IP := c.IP()
 	log := utilities.GoDotEnvVariable("LOG")

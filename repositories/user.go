@@ -29,30 +29,7 @@ func DecodeJWT(cookie, SecretKey string) (models.User, error) {
 	return tmp, nil
 }
 
-func IsUserExist(query string, val ...interface{}) bool {
-	var user models.User
-	db := database.DB.Where(query, val...).Last(&user)
-	return db.Error == nil
-}
-
-func GetModelUser(query string, val ...interface{}) (models.User, error) {
-	var user models.User
-	db := database.DB.Where(query, val...).Last(&user)
-	return user, db.Error
-}
-
-func GetModelUsers(query string, val ...interface{}) ([]models.User, error) {
-	var users []models.User
-	db := database.DB.Where(query, val...).Find(&users)
-	return users, db.Error
-}
-
-func GetAllUser() ([]models.User, error) {
-	var users []models.User
-	db := database.DB.Find(&users)
-	return users, db.Error
-}
-
+//CREATE
 func CreateUser(data map[string]string, dataint map[string]int, IP string) (models.User, error) {
 	password := utilities.HashKamil(data["password"])
 	log := utilities.GoDotEnvVariable("LOG")
@@ -97,4 +74,81 @@ func VerifyUser(user models.User, IP string) error {
 	msg = strconv.Itoa(int(user.ID)) + " verified successfully"
 	utilities.WriteLog(log, IP, msg)
 	return nil
+}
+
+//DELETE
+func DeleteUser(IP string, ID int) error { //DELETE
+
+	log := utilities.GoDotEnvVariable("LOG")
+	msg := strconv.Itoa(ID) + " menghapus"
+	utilities.WriteLog(log, IP, msg)
+	user, err := GetModelUser("ID = ?", ID)
+	if err != nil {
+		utilities.WriteLog(log, IP, err.Error())
+		return err
+	}
+	db := database.DB.Delete(&user)
+	if db.Error != nil {
+		utilities.WriteLog(log, IP, db.Error.Error())
+		return db.Error
+	}
+
+	msg = strconv.Itoa(ID) + " berhasil terhapus"
+	utilities.WriteLog(log, IP, msg)
+	return nil
+}
+
+//UPDATE
+func UpdateUser(data map[string]string, dataint map[string]int, IP string, ID int) error { //DELETE
+
+	log := utilities.GoDotEnvVariable("LOG")
+	msg := strconv.Itoa(ID) + " update"
+	utilities.WriteLog(log, IP, msg)
+	user, err := GetModelUser("ID = ?", ID)
+	if err != nil {
+		utilities.WriteLog(log, IP, err.Error())
+		return err
+	}
+	password := utilities.HashKamil(data["password"])
+	db := database.DB.Model(&user).Updates(models.User{
+		Username: data["username"],
+		Name:     data["name"],
+		Password: password,
+		Role:     data["role"],
+		Email:    data["email"],
+	})
+	if db.Error != nil {
+		utilities.WriteLog(log, IP, db.Error.Error())
+		return db.Error
+	}
+
+	msg = strconv.Itoa(ID) + " berhasil update"
+	utilities.WriteLog(log, IP, msg)
+	return nil
+}
+
+//READ
+
+func IsUserExist(query string, val ...interface{}) bool {
+	var user models.User
+	db := database.DB.Where(query, val...).Last(&user)
+	return db.Error == nil
+}
+
+func GetModelUser(query string, val ...interface{}) (models.User, error) {
+	var user models.User
+	db := database.DB.Where(query, val...).Last(&user)
+	return user, db.Error
+}
+
+func GetModelUsers(query string, val ...interface{}) ([]models.User, error) {
+	var users []models.User
+	db := database.DB.Where(query, val...).Find(&users)
+	return users, db.Error
+}
+
+func GetAllUser() ([]models.User, error) {
+	var users []models.User
+	db := database.DB.Find(&users)
+	return users, db.Error
 }

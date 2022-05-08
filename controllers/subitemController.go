@@ -40,7 +40,9 @@ func CreateSubitem(c *fiber.Ctx) error { //POST
 		value : hash
 	*/
 	if err := c.BodyParser(&data); err != nil {
-		return err
+		return c.JSON(fiber.Map{
+			"message": err.Error(),
+		})
 	}
 	dataint := utilities.MapStringToInt(data)
 	IP := c.IP()
@@ -103,7 +105,9 @@ func DeleteSubitem(c *fiber.Ctx) error { //DELETE
 func UpdateSubitem(c *fiber.Ctx) error { //UPDATE
 	var data map[string]string
 	if err := c.BodyParser(&data); err != nil {
-		return err
+		return c.JSON(fiber.Map{
+			"message": err.Error(),
+		})
 	}
 	dataint := utilities.MapStringToInt(data)
 
