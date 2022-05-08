@@ -8,7 +8,7 @@ import (
 
 func GetItems(c *fiber.Ctx) error { //GET
 	IP := c.IP()
-	log := utilities.GoDotEnvVariable("LOG")
+	log := "history.log"
 	if !IsAuthorized(c.Params("auth"), SecretKey) {
 
 		utilities.WriteLog(log, IP, "unauthorized")
@@ -47,7 +47,7 @@ func CreateItem(c *fiber.Ctx) error { //POST
 	}
 	dataint := utilities.MapStringToInt(data)
 	IP := c.IP()
-	log := utilities.GoDotEnvVariable("LOG")
+	log := "history.log"
 	if !IsAuthorized(c.Params("auth"), SecretKey) {
 		utilities.WriteLog(log, IP, "unauthorized")
 		c.Status(401)
@@ -79,7 +79,7 @@ func DeleteItem(c *fiber.Ctx) error { //DELETE
 		})
 	}
 	IP := c.IP()
-	log := utilities.GoDotEnvVariable("LOG")
+	log := "history.log"
 	if !IsAuthorized(c.Params("auth"), SecretKey) {
 		utilities.WriteLog(log, IP, "unauthorized")
 		c.Status(401)
@@ -118,7 +118,7 @@ func UpdateItem(c *fiber.Ctx) error { //UPDATE
 		})
 	}
 	IP := c.IP()
-	log := utilities.GoDotEnvVariable("LOG")
+	log := "history.log"
 	if !IsAuthorized(c.Params("auth"), SecretKey) {
 		utilities.WriteLog(log, IP, "unauthorized")
 		c.Status(401)
@@ -149,7 +149,7 @@ func GetItemByID(c *fiber.Ctx) error { //POST
 		}*/
 	ID, err := c.ParamsInt("id")
 	IP := c.IP()
-	log := utilities.GoDotEnvVariable("LOG")
+	log := "history.log"
 	if err != nil {
 		utilities.WriteLog(log, IP, err.Error())
 		c.Status(400)
@@ -184,7 +184,7 @@ func GetItemByID(c *fiber.Ctx) error { //POST
 func GetItemsByName(c *fiber.Ctx) error { //POST
 	name, err := c.ParamsInt("name")
 	IP := c.IP()
-	log := utilities.GoDotEnvVariable("LOG")
+	log := "history.log"
 	if err != nil {
 		utilities.WriteLog(log, IP, err.Error())
 		c.Status(400)

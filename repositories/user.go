@@ -32,7 +32,7 @@ func DecodeJWT(cookie, SecretKey string) (models.User, error) {
 //CREATE
 func CreateUser(data map[string]string, dataint map[string]int, IP string) (models.User, error) {
 	password := utilities.HashKamil(data["password"])
-	log := utilities.GoDotEnvVariable("LOG")
+	log := "history.log"
 	fmt.Println(data)
 	exist := IsUserExist("username = ? or email = ?", data["username"], data["email"])
 	if !exist {
@@ -59,7 +59,7 @@ func CreateUser(data map[string]string, dataint map[string]int, IP string) (mode
 }
 
 func VerifyUser(user models.User, IP string) error {
-	log := utilities.GoDotEnvVariable("LOG")
+	log := "history.log"
 	msg := strconv.Itoa(int(user.ID)) + " verify"
 	utilities.WriteLog(log, IP, msg)
 	fmt.Println(user)
@@ -79,7 +79,7 @@ func VerifyUser(user models.User, IP string) error {
 //DELETE
 func DeleteUser(IP string, ID int) error { //DELETE
 
-	log := utilities.GoDotEnvVariable("LOG")
+	log := "history.log"
 	msg := strconv.Itoa(ID) + " menghapus"
 	utilities.WriteLog(log, IP, msg)
 	user, err := GetUser("ID = ?", ID)
@@ -101,7 +101,7 @@ func DeleteUser(IP string, ID int) error { //DELETE
 //UPDATE
 func UpdateUser(data map[string]string, dataint map[string]int, IP string, ID int) error { //DELETE
 
-	log := utilities.GoDotEnvVariable("LOG")
+	log := "history.log"
 	msg := strconv.Itoa(ID) + " update"
 	utilities.WriteLog(log, IP, msg)
 	user, err := GetUser("ID = ?", ID)

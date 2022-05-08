@@ -10,7 +10,7 @@ import (
 func AuthUser(c *fiber.Ctx) error { //POST
 	auth := c.Params("auth")
 	IP := c.IP()
-	log := utilities.GoDotEnvVariable("LOG")
+	log := "history.log"
 	user, err := repositories.DecodeJWT(auth, SecretKey)
 	if err != nil {
 		utilities.WriteLog(log, IP, "Gagal login")
@@ -30,7 +30,7 @@ func AuthUser(c *fiber.Ctx) error { //POST
 func RegisterAuth(c *fiber.Ctx) error {
 	auth := c.Params("auth")
 	IP := c.IP()
-	log := utilities.GoDotEnvVariable("LOG")
+	log := "history.log"
 	user, err := repositories.DecodeJWT(auth, SecretKey)
 	if err != nil {
 		utilities.WriteLog(log, IP, "Gagal verified")
@@ -66,7 +66,7 @@ func DeleteUser(c *fiber.Ctx) error { //DELETE
 		})
 	}
 	IP := c.IP()
-	log := utilities.GoDotEnvVariable("LOG")
+	log := "history.log"
 	if !IsAuthorized(c.Params("auth"), SecretKey) {
 		utilities.WriteLog(log, IP, "unauthorized")
 		c.Status(401)
@@ -106,7 +106,7 @@ func UpdateUser(c *fiber.Ctx) error { //UPDATE
 		})
 	}
 	IP := c.IP()
-	log := utilities.GoDotEnvVariable("LOG")
+	log := "history.log"
 	if !IsAuthorized(c.Params("auth"), SecretKey) {
 		utilities.WriteLog(log, IP, "unauthorized")
 		c.Status(401)
@@ -132,7 +132,7 @@ func UpdateUser(c *fiber.Ctx) error { //UPDATE
 //READ
 func GetUserByID(c *fiber.Ctx) error { //POST
 	IP := c.IP()
-	log := utilities.GoDotEnvVariable("LOG")
+	log := "history.log"
 	if !IsAuthorized(c.Params("auth"), SecretKey) {
 		utilities.WriteLog(log, IP, "unauthorized")
 		c.Status(401)
@@ -167,7 +167,7 @@ func GetUserByID(c *fiber.Ctx) error { //POST
 
 func GetUserByName(c *fiber.Ctx) error { //POST
 	IP := c.IP()
-	log := utilities.GoDotEnvVariable("LOG")
+	log := "history.log"
 	if !IsAuthorized(c.Params("auth"), SecretKey) {
 		utilities.WriteLog(log, IP, "unauthorized")
 		c.Status(401)
@@ -202,7 +202,7 @@ func GetUserByName(c *fiber.Ctx) error { //POST
 
 func GetUsers(c *fiber.Ctx) error { //POST
 	IP := c.IP()
-	log := utilities.GoDotEnvVariable("LOG")
+	log := "history.log"
 	if !IsAuthorized(c.Params("auth"), SecretKey) {
 		utilities.WriteLog(log, IP, "unauthorized")
 		c.Status(401)
