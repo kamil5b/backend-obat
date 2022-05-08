@@ -38,7 +38,7 @@ func DeleteItem(IP string, ID int) error { //DELETE
 	log := utilities.GoDotEnvVariable("LOG")
 	msg := strconv.Itoa(ID) + " menghapus"
 	utilities.WriteLog(log, IP, msg)
-	item, err := GetAnItem("ID = ?", ID)
+	item, err := GetItem("ID = ?", ID)
 	if err != nil {
 		utilities.WriteLog(log, IP, err.Error())
 		return err
@@ -60,7 +60,7 @@ func UpdateItem(data map[string]string, dataint map[string]int, IP string, ID in
 	log := utilities.GoDotEnvVariable("LOG")
 	msg := strconv.Itoa(ID) + " update"
 	utilities.WriteLog(log, IP, msg)
-	item, err := GetAnItem("ID = ?", ID)
+	item, err := GetItem("ID = ?", ID)
 	if err != nil {
 		utilities.WriteLog(log, IP, err.Error())
 		return err
@@ -91,7 +91,7 @@ func IsItemExist(query string, val ...interface{}) bool {
 
 //GET AN ITEM
 
-func GetAnItem(query string, val ...interface{}) (models.Item, error) {
+func GetItem(query string, val ...interface{}) (models.Item, error) {
 	var item models.Item
 	db := database.DB.Where(query, val...).Last(&item)
 	if db.Error != nil {
@@ -102,7 +102,7 @@ func GetAnItem(query string, val ...interface{}) (models.Item, error) {
 
 //ARRAY
 
-func GetPartItems(query string, val ...interface{}) ([]models.Item, error) {
+func GetItems(query string, val ...interface{}) ([]models.Item, error) {
 	var items []models.Item
 	db := database.DB.Where(query, val...).Find(&items)
 	if db.Error != nil {

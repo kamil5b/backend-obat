@@ -82,7 +82,7 @@ func DeleteUser(IP string, ID int) error { //DELETE
 	log := utilities.GoDotEnvVariable("LOG")
 	msg := strconv.Itoa(ID) + " menghapus"
 	utilities.WriteLog(log, IP, msg)
-	user, err := GetModelUser("ID = ?", ID)
+	user, err := GetUser("ID = ?", ID)
 	if err != nil {
 		utilities.WriteLog(log, IP, err.Error())
 		return err
@@ -104,7 +104,7 @@ func UpdateUser(data map[string]string, dataint map[string]int, IP string, ID in
 	log := utilities.GoDotEnvVariable("LOG")
 	msg := strconv.Itoa(ID) + " update"
 	utilities.WriteLog(log, IP, msg)
-	user, err := GetModelUser("ID = ?", ID)
+	user, err := GetUser("ID = ?", ID)
 	if err != nil {
 		utilities.WriteLog(log, IP, err.Error())
 		return err
@@ -135,13 +135,13 @@ func IsUserExist(query string, val ...interface{}) bool {
 	return db.Error == nil
 }
 
-func GetModelUser(query string, val ...interface{}) (models.User, error) {
+func GetUser(query string, val ...interface{}) (models.User, error) {
 	var user models.User
 	db := database.DB.Where(query, val...).Last(&user)
 	return user, db.Error
 }
 
-func GetModelUsers(query string, val ...interface{}) ([]models.User, error) {
+func GetUsers(query string, val ...interface{}) ([]models.User, error) {
 	var users []models.User
 	db := database.DB.Where(query, val...).Find(&users)
 	return users, db.Error

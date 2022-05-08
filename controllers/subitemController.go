@@ -161,7 +161,7 @@ func GetSubitemByID(c *fiber.Ctx) error { //POST
 		})
 	}
 	//IP := c.IP()
-	item, err := repositories.GetASubitem("ID = ?", ID)
+	item, err := repositories.GetSubitem("ID = ?", ID)
 	if err != nil {
 		utilities.WriteLog(log, IP, err.Error())
 		c.Status(400)
@@ -196,7 +196,7 @@ func GetSubitemsByName(c *fiber.Ctx) error { //POST
 			"message": "Unauthorized",
 		})
 	}
-	items, err := repositories.GetASubitem("name like %?%", name)
+	items, err := repositories.GetSubitems("name like %?%", name)
 	if err != nil {
 		utilities.WriteLog(log, IP, err.Error())
 		c.Status(400)

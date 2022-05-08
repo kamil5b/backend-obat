@@ -39,7 +39,7 @@ func RegisterUser(c *fiber.Ctx) error { //POST
 			"message": err,
 		})
 	}
-	user, err = repositories.GetModelUser("ID = ?", user.ID)
+	user, err = repositories.GetUser("ID = ?", user.ID)
 	if err != nil {
 		msg = data["username"] + " " + err.Error()
 		utilities.WriteLog(log, IP, msg)
@@ -109,7 +109,7 @@ func LoginUser(c *fiber.Ctx) error { //POST
 	msg := data["username"] + " mencoba untuk login"
 	utilities.WriteLog(log, IP, msg)
 	password := utilities.HashKamil(data["password"])
-	user, err := repositories.GetModelUser("username = ? and password = ? and verified", data["username"], password)
+	user, err := repositories.GetUser("username = ? and password = ? and verified", data["username"], password)
 	if err != nil {
 		msg = data["username"] + " " + err.Error()
 		utilities.WriteLog(log, IP, msg)

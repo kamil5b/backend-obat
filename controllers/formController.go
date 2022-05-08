@@ -123,7 +123,7 @@ func GetFormByID(c *fiber.Ctx) error { //POST
 			"message": err.Error(),
 		})
 	}
-	form, err := repositories.GetForm(ID)
+	form, err := repositories.GetForm("ID = ?", ID)
 	if err != nil {
 		return c.JSON(fiber.Map{
 			"message": err.Error(),
@@ -157,7 +157,7 @@ func GetFormByStudent(c *fiber.Ctx) error { //POST
 			"message": err.Error(),
 		})
 	}
-	form, err := repositories.GetFormStudent(ID)
+	forms, err := repositories.GetForms("id_student = ?", ID)
 	if err != nil {
 		return c.JSON(fiber.Map{
 			"message": err.Error(),
@@ -166,7 +166,7 @@ func GetFormByStudent(c *fiber.Ctx) error { //POST
 	}
 	return c.JSON(fiber.Map{
 		"message": "success",
-		"form":    form,
+		"forms":   forms,
 	})
 
 }
@@ -189,7 +189,7 @@ func GetFormByTeacher(c *fiber.Ctx) error { //POST
 			"forms":   nil,
 		})
 	}
-	forms, err := repositories.GetFormTeacher(ID)
+	forms, err := repositories.GetForms("id_teacher = ?", ID)
 	if err != nil {
 		return c.JSON(fiber.Map{
 			"message": err.Error(),

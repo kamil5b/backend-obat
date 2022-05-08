@@ -149,7 +149,7 @@ func GetUserByID(c *fiber.Ctx) error { //POST
 		})
 	}
 
-	user, err := repositories.GetModelUser("ID = ?", ID)
+	user, err := repositories.GetUser("ID = ?", ID)
 	if err != nil {
 		utilities.WriteLog(log, IP, err.Error())
 		c.Status(400)
@@ -184,7 +184,7 @@ func GetUserByName(c *fiber.Ctx) error { //POST
 		})
 	}
 
-	users, err := repositories.GetModelUsers("name like %?%", name)
+	users, err := repositories.GetUsers("name like %?%", name)
 	if err != nil {
 		utilities.WriteLog(log, IP, err.Error())
 		c.Status(400)

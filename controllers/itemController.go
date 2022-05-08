@@ -165,7 +165,7 @@ func GetItemByID(c *fiber.Ctx) error { //POST
 		})
 	}
 	//IP := c.IP()
-	item, err := repositories.GetAnItem("ID = ?", ID)
+	item, err := repositories.GetItem("ID = ?", ID)
 	if err != nil {
 		utilities.WriteLog(log, IP, err.Error())
 		c.Status(400)
@@ -199,7 +199,7 @@ func GetItemsByName(c *fiber.Ctx) error { //POST
 			"message": "Unauthorized",
 		})
 	}
-	items, err := repositories.GetAnItem("name like %?%", name)
+	items, err := repositories.GetItems("name like %?%", name)
 	if err != nil {
 		utilities.WriteLog(log, IP, err.Error())
 		c.Status(400)
