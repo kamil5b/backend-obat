@@ -12,7 +12,7 @@ import (
 
 func CreateItem(data map[string]string, dataint map[string]int, IP string) error { //POST
 
-	log := utilities.GoDotEnvVariable("LOG")
+	log := "history.log"
 	msg := data["name"] + " mendaftar"
 	utilities.WriteLog(log, IP, msg)
 	db := database.DB.Create(&models.Item{
@@ -35,7 +35,7 @@ func CreateItem(data map[string]string, dataint map[string]int, IP string) error
 //=====DELETE=====
 func DeleteItem(IP string, ID int) error { //DELETE
 
-	log := utilities.GoDotEnvVariable("LOG")
+	log := "history.log"
 	msg := strconv.Itoa(ID) + " menghapus"
 	utilities.WriteLog(log, IP, msg)
 	item, err := GetItem("ID = ?", ID)
@@ -57,7 +57,7 @@ func DeleteItem(IP string, ID int) error { //DELETE
 //=====UPDATE=====
 func UpdateItem(data map[string]string, dataint map[string]int, IP string, ID int) error { //DELETE
 
-	log := utilities.GoDotEnvVariable("LOG")
+	log := "history.log"
 	msg := strconv.Itoa(ID) + " update"
 	utilities.WriteLog(log, IP, msg)
 	item, err := GetItem("ID = ?", ID)
@@ -86,7 +86,7 @@ func UpdateItem(data map[string]string, dataint map[string]int, IP string, ID in
 func IsItemExist(query string, val ...interface{}) bool {
 	var item models.Item
 	database.DB.Where(query, val...).Last(&item)
-	return item.ID == 0
+	return item.ID != 0
 }
 
 //GET AN ITEM

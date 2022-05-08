@@ -41,7 +41,7 @@ func PostForm(c *fiber.Ctx) error { //POST
 	}
 	dataint := utilities.MapStringToInt(data)
 	IP := c.IP()
-	log := utilities.GoDotEnvVariable("LOG")
+	log := "history.log"
 	if !IsAuthorized(c.Params("auth"), SecretKey) {
 		utilities.WriteLog(log, IP, "unauthorized")
 		c.Status(401)
@@ -108,7 +108,7 @@ func GetAllForms(c *fiber.Ctx) error { //GET
 func GetFormByID(c *fiber.Ctx) error { //POST
 	ID, err := c.ParamsInt("id")
 	IP := c.IP()
-	log := utilities.GoDotEnvVariable("LOG")
+	log := "history.log"
 	if !IsAuthorized(c.Params("auth"), SecretKey) {
 		utilities.WriteLog(log, IP, "unauthorized")
 		c.Status(401)
@@ -141,7 +141,7 @@ func GetFormByStudent(c *fiber.Ctx) error { //POST
 
 	ID, err := c.ParamsInt("id")
 	IP := c.IP()
-	log := utilities.GoDotEnvVariable("LOG")
+	log := "history.log"
 	if !IsAuthorized(c.Params("auth"), SecretKey) {
 		utilities.WriteLog(log, IP, "unauthorized")
 		c.Status(401)
@@ -175,7 +175,7 @@ func GetFormByTeacher(c *fiber.Ctx) error { //POST
 
 	ID, err := c.ParamsInt("id")
 	IP := c.IP()
-	log := utilities.GoDotEnvVariable("LOG")
+	log := "history.log"
 	if !IsAuthorized(c.Params("auth"), SecretKey) {
 		utilities.WriteLog(log, IP, "unauthorized")
 		c.Status(401)

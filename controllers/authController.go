@@ -28,7 +28,7 @@ func RegisterUser(c *fiber.Ctx) error { //POST
 	}
 
 	IP := c.IP()
-	log := utilities.GoDotEnvVariable("LOG")
+	log := "history.log"
 	msg := data["username"] + " mendaftar"
 	utilities.WriteLog(log, IP, msg)
 	dataint := utilities.MapStringToInt(data)
@@ -105,7 +105,7 @@ func LoginUser(c *fiber.Ctx) error { //POST
 		})
 	}
 	IP := c.IP()
-	log := utilities.GoDotEnvVariable("LOG")
+	log := "history.log"
 	msg := data["username"] + " mencoba untuk login"
 	utilities.WriteLog(log, IP, msg)
 	password := utilities.HashKamil(data["password"])
@@ -163,7 +163,7 @@ func IsAuthorized(cookie, SecretKey string) bool {
 /*
 
 func Login(data map[string]string, dataint map[string]int, IP string, SecretKey string) (string, int) {
-	log := utilities.GoDotEnvVariable("LOG")
+	log := "history.log"
 	if !IsAuthorized(c.Params("auth"), SecretKey) {
 		utilities.WriteLog(log, IP, "unauthorized")
 		c.Status(401)

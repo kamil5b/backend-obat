@@ -14,7 +14,7 @@ import (
 
 func CreateSubitem(data map[string]string, dataint map[string]int, IP string) error { //POST
 
-	log := utilities.GoDotEnvVariable("LOG")
+	log := "history.log"
 	msg := strconv.Itoa(dataint["int1"]) + " mendaftar"
 	utilities.WriteLog(log, IP, msg)
 	item, err := GetItem("ID = ?", dataint["id_other"])
@@ -48,7 +48,7 @@ func CreateSubitem(data map[string]string, dataint map[string]int, IP string) er
 //=====DELETE=====
 func DeleteSubitem(IP string, ID int) error { //DELETE
 
-	log := utilities.GoDotEnvVariable("LOG")
+	log := "history.log"
 	msg := strconv.Itoa(ID) + " menghapus"
 	utilities.WriteLog(log, IP, msg)
 	subitem, err := GetSubitem("ID = ?", ID)
@@ -70,7 +70,7 @@ func DeleteSubitem(IP string, ID int) error { //DELETE
 //=====UPDATE=====
 func UpdateSubitem(data map[string]string, dataint map[string]int, IP string, ID int) error { //DELETE
 
-	log := utilities.GoDotEnvVariable("LOG")
+	log := "history.log"
 	msg := strconv.Itoa(ID) + " update"
 	utilities.WriteLog(log, IP, msg)
 	subitem, err := GetSubitem("ID = ?", ID)
