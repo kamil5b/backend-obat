@@ -46,12 +46,12 @@ func CreateSubitem(data map[string]string, dataint map[string]int, IP string) er
 }
 
 //=====DELETE=====
-func DeleteSubitem(data map[string]string, dataint map[string]int, IP string) error { //DELETE
+func DeleteSubitem(IP string, ID int) error { //DELETE
 
 	log := utilities.GoDotEnvVariable("LOG")
-	msg := data["id"] + " menghapus"
+	msg := strconv.Itoa(ID) + " menghapus"
 	utilities.WriteLog(log, IP, msg)
-	subitem, err := GetASubitem("ID = ?", dataint["id"])
+	subitem, err := GetASubitem("ID = ?", ID)
 	if err != nil {
 		utilities.WriteLog(log, IP, err.Error())
 		return err
@@ -62,18 +62,18 @@ func DeleteSubitem(data map[string]string, dataint map[string]int, IP string) er
 		return db.Error
 	}
 
-	msg = data["id"] + " berhasil terhapus"
+	msg = strconv.Itoa(ID) + " berhasil terhapus"
 	utilities.WriteLog(log, IP, msg)
 	return nil
 }
 
 //=====UPDATE=====
-func UpdateSubitem(data map[string]string, dataint map[string]int, IP string) error { //DELETE
+func UpdateSubitem(data map[string]string, dataint map[string]int, IP string, ID int) error { //DELETE
 
 	log := utilities.GoDotEnvVariable("LOG")
-	msg := data["id"] + " update"
+	msg := strconv.Itoa(ID) + " update"
 	utilities.WriteLog(log, IP, msg)
-	subitem, err := GetASubitem("ID = ?", dataint["id"])
+	subitem, err := GetASubitem("ID = ?", ID)
 	if err != nil {
 		utilities.WriteLog(log, IP, err.Error())
 		return err
@@ -94,7 +94,7 @@ func UpdateSubitem(data map[string]string, dataint map[string]int, IP string) er
 		return db.Error
 	}
 
-	msg = data["id"] + " berhasil update"
+	msg = strconv.Itoa(ID) + " berhasil update"
 	utilities.WriteLog(log, IP, msg)
 	return nil
 }
@@ -104,7 +104,7 @@ func UpdateSubitem(data map[string]string, dataint map[string]int, IP string) er
 
 func GetASubitem(query string, val ...interface{}) (models.Subitem, error) {
 	var subitem models.Subitem
-	db := database.DB.Where(query, val).Preload(clause.Associations).Last(&subitem)
+	db := database.DB.Where(query, val...).Preload(clause.Associations).Last(&subitem)
 	if db.Error != nil {
 		return subitem, db.Error
 	}
@@ -115,7 +115,7 @@ func GetASubitem(query string, val ...interface{}) (models.Subitem, error) {
 
 func GetPartSubitems(query string, val ...interface{}) ([]models.Subitem, error) {
 	var subitems []models.Subitem
-	db := database.DB.Where(query, val).Preload(clause.Associations).Find(&subitems)
+	db := database.DB.Where(query, val...).Preload(clause.Associations).Find(&subitems)
 	if db.Error != nil {
 		return subitems, db.Error
 	}

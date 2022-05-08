@@ -3,6 +3,8 @@ package repositories
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
+	"strconv"
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/kamil5b/backend-template/database"
@@ -29,41 +31,70 @@ func DecodeJWT(cookie, SecretKey string) (models.User, error) {
 
 func IsUserExist(query string, val ...interface{}) bool {
 	var user models.User
-	database.DB.Where(query, val).Last(&user)
-	return user.ID == 0
+	db := database.DB.Where(query, val...).Last(&user)
+	return db.Error == nil
 }
 
 func GetModelUser(query string, val ...interface{}) (models.User, error) {
 	var user models.User
-	db := database.DB.Where(query, val).Last(&user)
+	db := database.DB.Where(query, val...).Last(&user)
 	return user, db.Error
 }
 
-func GetAllUser(query string, val ...interface{}) ([]models.User, error) {
+func GetModelUsers(query string, val ...interface{}) ([]models.User, error) {
 	var users []models.User
-	db := database.DB.Where(query, val).Find(&users)
+	db := database.DB.Where(query, val...).Find(&users)
 	return users, db.Error
 }
 
-func CreateUser(data map[string]string, dataint map[string]int, IP string) error {
+func GetAllUser() ([]models.User, error) {
+	var users []models.User
+	db := database.DB.Find(&users)
+	return users, db.Error
+}
+
+func CreateUser(data map[string]string, dataint map[string]int, IP string) (models.User, error) {
 	password := utilities.HashKamil(data["password"])
 	log := utilities.GoDotEnvVariable("LOG")
-	exist := IsUserExist("username = ?", data["username"])
+	fmt.Println(data)
+	exist := IsUserExist("username = ? or email = ?", data["username"], data["email"])
 	if !exist {
 		/*
 			belum register. Register masukin ke table user hash
 		*/
-		database.DB.Create(&models.User{
+		user := models.User{
 			Username: data["username"],
 			Name:     data["name"],
 			Password: password,
 			Role:     data["role"],
-		})
+			Email:    data["email"],
+			Verified: false,
+		}
+		database.DB.Create(&user)
 		msg := data["username"] + " berhasil mendaftar"
 		utilities.WriteLog(log, IP, msg)
-		return errors.New(msg)
+		fmt.Println(user)
+		return user, nil
 	}
 	msg := data["username"] + " telah mendaftar sebelumnya"
+	utilities.WriteLog(log, IP, msg)
+	return models.User{}, errors.New(msg)
+}
+
+func VerifyUser(user models.User, IP string) error {
+	log := utilities.GoDotEnvVariable("LOG")
+	msg := strconv.Itoa(int(user.ID)) + " verify"
+	utilities.WriteLog(log, IP, msg)
+	fmt.Println(user)
+	db := database.DB.Model(&user).Where("ID = ?", user.ID).Updates(models.User{
+		Verified: true,
+	})
+	if db.Error != nil {
+		utilities.WriteLog(log, IP, db.Error.Error())
+		return db.Error
+	}
+
+	msg = strconv.Itoa(int(user.ID)) + " verified successfully"
 	utilities.WriteLog(log, IP, msg)
 	return nil
 }

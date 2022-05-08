@@ -15,15 +15,21 @@ func Setup(app *fiber.App) {
 	//----AUTH----
 	app.Post("/api/register", controllers.RegisterUser)
 	app.Post("/api/login", controllers.LoginUser)
-	app.Post("/api/:auth", controllers.PostUser)
+	app.Get("/api/:auth", controllers.AuthUser)
+	app.Get("/api/verify/:auth", controllers.RegisterAuth)
+
+	//----USER----
+	app.Get("/api/users/:auth", controllers.GetUsers)
+	app.Get("/api/user/:id/:auth", controllers.GetUserByID)
+	app.Get("/api/users/:name/:auth", controllers.GetUserByName)
 
 	//----FORM----
 	//CREATE
 	app.Post("/api/form/:auth", controllers.PostForm)
 	//READ
-	app.Post("/api/form/id/:auth", controllers.GetFormByID)
-	app.Post("/api/form/student/:auth", controllers.GetFormByStudent)
-	app.Post("/api/form/teacher/:auth", controllers.GetFormByTeacher)
+	app.Get("/api/form/:id/:auth", controllers.GetFormByID)
+	app.Get("/api/form/student/:id/:auth", controllers.GetFormByStudent)
+	app.Get("/api/form/teacher/:id/:auth", controllers.GetFormByTeacher)
 	app.Get("/api/form/:auth", controllers.GetAllForms)
 
 	//----ITEM----
@@ -31,23 +37,23 @@ func Setup(app *fiber.App) {
 	app.Post("/api/item/:auth", controllers.CreateItem)
 	//READ
 	app.Get("/api/items/:auth", controllers.GetItems)
-	app.Post("/api/item/id/:auth", controllers.GetItemByID)
-	app.Post("/api/item/name/:auth", controllers.GetItemsByName)
+	app.Get("/api/item/:id/:auth", controllers.GetItemByID)
+	app.Get("/api/items/:name/:auth", controllers.GetItemsByName)
 	//DELETE
-	app.Delete("/api/item/id/:auth", controllers.DeleteItem)
+	app.Delete("/api/item/:id/:auth", controllers.DeleteItem)
 	//UPDATE
-	app.Put("/api/item/id/:auth", controllers.UpdateItem)
+	app.Put("/api/item/:id/:auth", controllers.UpdateItem)
 
 	//----SUBITEM----
 	//CREATE
 	app.Post("/api/subitem/:auth", controllers.CreateSubitem)
 	//READ
 	app.Get("/api/subitems/:auth", controllers.GetSubitems)
-	app.Post("/api/subitem/id/:auth", controllers.GetSubitemByID)
-	app.Post("/api/subitem/name/:auth", controllers.GetSubitemsByName)
+	app.Get("/api/subitem/:id/:auth", controllers.GetSubitemByID)
+	app.Get("/api/subitems/:name/:auth", controllers.GetSubitemsByName)
 	//DELETE
-	app.Delete("/api/subitem/id/:auth", controllers.DeleteSubitem)
+	app.Delete("/api/subitem/:id/:auth", controllers.DeleteSubitem)
 	//UPDATE
-	app.Put("/api/subitem/id/:auth", controllers.UpdateSubitem)
+	app.Put("/api/subitem/:id/:auth", controllers.UpdateSubitem)
 
 }

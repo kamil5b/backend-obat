@@ -1,0 +1,63 @@
+[05/05/2022 21:51:15.026 127.0.0.1] kamil5b mendaftar
+[05/05/2022 21:51:15.066 127.0.0.1] kamil5b telah mendaftar sebelumnya
+[05/05/2022 21:52:27.987 127.0.0.1] kamil5b mendaftar
+[05/05/2022 21:52:27.989 127.0.0.1] kamil5b telah mendaftar sebelumnya
+[05/05/2022 22:12:19.734 127.0.0.1] kamil5b mendaftar
+[05/05/2022 22:12:19.775 127.0.0.1] kamil5b telah mendaftar sebelumnya
+[05/05/2022 22:14:51.704 127.0.0.1] kamil5b mendaftar
+[05/05/2022 22:14:51.732 127.0.0.1] kamil5b berhasil mendaftar
+[05/05/2022 22:14:51.732 127.0.0.1] kamil5b berhasil register unverified 
+[05/05/2022 22:18:07.192 127.0.0.1] 0 verify
+[05/05/2022 22:18:07.193 127.0.0.1] WHERE conditions required
+[05/05/2022 22:18:07.193 127.0.0.1] Gagal verify
+[05/05/2022 22:19:25.262 127.0.0.1] 0 verify
+[05/05/2022 22:19:25.302 127.0.0.1] 0 verified
+[05/05/2022 22:19:25.302 127.0.0.1] Berhasil
+[05/05/2022 22:20:09.293 127.0.0.1] 0 verify
+[05/05/2022 22:20:09.294 127.0.0.1] 0 verified
+[05/05/2022 22:20:09.294 127.0.0.1] Berhasil
+[05/05/2022 22:21:49.335 127.0.0.1] 0 verify
+[05/05/2022 22:21:49.337 127.0.0.1] 0 verified
+[05/05/2022 22:21:49.337 127.0.0.1] Berhasil
+[05/05/2022 22:29:38.928 127.0.0.1] kamil5b mendaftar
+[05/05/2022 22:29:38.973 127.0.0.1] kamil5b berhasil mendaftar
+[05/05/2022 22:29:38.973 127.0.0.1] kamil5b berhasil register unverified 
+[05/05/2022 22:30:37.392 127.0.0.1] kamil5b mendaftar
+[05/05/2022 22:30:37.437 127.0.0.1] kamil5b berhasil mendaftar
+[05/05/2022 22:30:37.438 127.0.0.1] kamil5b berhasil register unverified 
+[05/05/2022 22:30:57.900 127.0.0.1] 3 verify
+[05/05/2022 22:30:57.939 127.0.0.1] 3 verified
+[05/05/2022 22:30:57.939 127.0.0.1] Berhasil
+[05/05/2022 22:33:26.864 127.0.0.1] kamil5b mencoba untuk login
+[05/05/2022 22:33:26.903 127.0.0.1] kamil5b berhasil login sebagai admin
+[05/05/2022 22:35:02.596 127.0.0.1] Berhasil
+[05/05/2022 23:57:28.835 127.0.0.1] Berhasil
+[05/05/2022 23:59:54.259 127.0.0.1] unauthorized
+[06/05/2022 00:00:01.994 127.0.0.1] kamil5b mencoba untuk login
+[06/05/2022 00:00:02.032 127.0.0.1] kamil5b berhasil login sebagai admin
+[06/05/2022 00:00:11.237 127.0.0.1] unauthorized
+[06/05/2022 00:00:44.639 127.0.0.1] unauthorized
+[06/05/2022 00:02:13.003 127.0.0.1] item pertama mendaftar
+[06/05/2022 00:02:13.005 127.0.0.1] item pertama berhasil terbuat
+[06/05/2022 00:02:13.005 127.0.0.1] Berhasil
+[06/05/2022 00:02:34.933 127.0.0.1] Get all item
+[06/05/2022 00:02:34.934 127.0.0.1] Berhasil
+[06/05/2022 00:07:10.821 127.0.0.1] 1 menghapus
+[06/05/2022 00:07:10.859 127.0.0.1] 1 berhasil terhapus
+[06/05/2022 00:07:10.860 127.0.0.1] Berhasil
+[06/05/2022 00:07:20.541 127.0.0.1] Get all item
+[06/05/2022 00:07:20.541 127.0.0.1] Berhasil
+[08/05/2022 18:52:20.647 127.0.0.1] kamil5b mencoba untuk login
+[08/05/2022 18:52:20.649 127.0.0.1] kamil5b berhasil login sebagai admin
+[08/05/2022 18:52:29.777 127.0.0.1] Get all item
+[08/05/2022 18:52:29.778 127.0.0.1] Berhasil
+[08/05/2022 18:52:51.413 127.0.0.1] item kedua mendaftar
+[08/05/2022 18:52:51.414 127.0.0.1] item kedua berhasil terbuat
+[08/05/2022 18:52:51.414 127.0.0.1] Berhasil
+[08/05/2022 18:52:53.975 127.0.0.1] Get all item
+[08/05/2022 18:52:53.975 127.0.0.1] Berhasil
+[08/05/2022 18:54:33.236 127.0.0.1] Get all item
+[08/05/2022 18:54:33.237 127.0.0.1] Berhasil
+[08/05/2022 18:57:22.047 127.0.0.1] Berhasil
+[08/05/2022 18:57:37.991 127.0.0.1] Berhasil
+[08/05/2022 18:58:46.471 127.0.0.1] Berhasil

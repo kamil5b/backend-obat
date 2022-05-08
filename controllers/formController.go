@@ -104,16 +104,24 @@ func GetAllForms(c *fiber.Ctx) error { //GET
 }
 
 func GetFormByID(c *fiber.Ctx) error { //POST
-	/*
-		id : int
-	*/
-	var data map[string]string
-	if err := c.BodyParser(&data); err != nil {
-		return err
+	ID, err := c.ParamsInt("id")
+	IP := c.IP()
+	log := utilities.GoDotEnvVariable("LOG")
+	if !IsAuthorized(c.Params("auth"), SecretKey) {
+		utilities.WriteLog(log, IP, "unauthorized")
+		c.Status(401)
+		return c.JSON(fiber.Map{
+			"message": "Unauthorized",
+		})
 	}
-	dataint := utilities.MapStringToInt(data)
-
-	form, err := repositories.GetForm(dataint["id"])
+	if err != nil {
+		utilities.WriteLog(log, IP, err.Error())
+		c.Status(400)
+		return c.JSON(fiber.Map{
+			"message": err.Error(),
+		})
+	}
+	form, err := repositories.GetForm(ID)
 	if err != nil {
 		return c.JSON(fiber.Map{
 			"message": err.Error(),
@@ -128,16 +136,26 @@ func GetFormByID(c *fiber.Ctx) error { //POST
 }
 
 func GetFormByStudent(c *fiber.Ctx) error { //POST
-	/*
-		id_student : int
-	*/
-	var data map[string]string
-	if err := c.BodyParser(&data); err != nil {
-		return err
-	}
-	dataint := utilities.MapStringToInt(data)
 
-	form, err := repositories.GetFormStudent(dataint["id_student"])
+	ID, err := c.ParamsInt("id")
+	IP := c.IP()
+	log := utilities.GoDotEnvVariable("LOG")
+	if !IsAuthorized(c.Params("auth"), SecretKey) {
+		utilities.WriteLog(log, IP, "unauthorized")
+		c.Status(401)
+		return c.JSON(fiber.Map{
+			"message": "Unauthorized",
+		})
+	}
+
+	if err != nil {
+		utilities.WriteLog(log, IP, err.Error())
+		c.Status(400)
+		return c.JSON(fiber.Map{
+			"message": err.Error(),
+		})
+	}
+	form, err := repositories.GetFormStudent(ID)
 	if err != nil {
 		return c.JSON(fiber.Map{
 			"message": err.Error(),
@@ -152,16 +170,24 @@ func GetFormByStudent(c *fiber.Ctx) error { //POST
 }
 
 func GetFormByTeacher(c *fiber.Ctx) error { //POST
-	/*
-		id_teacher : int
-	*/
-	var data map[string]string
-	if err := c.BodyParser(&data); err != nil {
-		return err
-	}
-	dataint := utilities.MapStringToInt(data)
 
-	forms, err := repositories.GetFormTeacher(dataint["id_teacher"])
+	ID, err := c.ParamsInt("id")
+	IP := c.IP()
+	log := utilities.GoDotEnvVariable("LOG")
+	if !IsAuthorized(c.Params("auth"), SecretKey) {
+		utilities.WriteLog(log, IP, "unauthorized")
+		c.Status(401)
+		return c.JSON(fiber.Map{
+			"message": "Unauthorized",
+		})
+	}
+	if err != nil {
+		return c.JSON(fiber.Map{
+			"message": err.Error(),
+			"forms":   nil,
+		})
+	}
+	forms, err := repositories.GetFormTeacher(ID)
 	if err != nil {
 		return c.JSON(fiber.Map{
 			"message": err.Error(),

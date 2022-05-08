@@ -1,6 +1,8 @@
 package repositories
 
 import (
+	"strconv"
+
 	"github.com/kamil5b/backend-template/database"
 	"github.com/kamil5b/backend-template/models"
 	"github.com/kamil5b/backend-template/utilities"
@@ -31,12 +33,12 @@ func CreateItem(data map[string]string, dataint map[string]int, IP string) error
 }
 
 //=====DELETE=====
-func DeleteItem(data map[string]string, dataint map[string]int, IP string) error { //DELETE
+func DeleteItem(IP string, ID int) error { //DELETE
 
 	log := utilities.GoDotEnvVariable("LOG")
-	msg := data["id"] + " menghapus"
+	msg := strconv.Itoa(ID) + " menghapus"
 	utilities.WriteLog(log, IP, msg)
-	item, err := GetAnItem("ID = ?", dataint["id"])
+	item, err := GetAnItem("ID = ?", ID)
 	if err != nil {
 		utilities.WriteLog(log, IP, err.Error())
 		return err
@@ -47,18 +49,18 @@ func DeleteItem(data map[string]string, dataint map[string]int, IP string) error
 		return db.Error
 	}
 
-	msg = data["id"] + " berhasil terhapus"
+	msg = strconv.Itoa(ID) + " berhasil terhapus"
 	utilities.WriteLog(log, IP, msg)
 	return nil
 }
 
 //=====UPDATE=====
-func UpdateItem(data map[string]string, dataint map[string]int, IP string) error { //DELETE
+func UpdateItem(data map[string]string, dataint map[string]int, IP string, ID int) error { //DELETE
 
 	log := utilities.GoDotEnvVariable("LOG")
-	msg := data["id"] + " update"
+	msg := strconv.Itoa(ID) + " update"
 	utilities.WriteLog(log, IP, msg)
-	item, err := GetAnItem("ID = ?", dataint["id"])
+	item, err := GetAnItem("ID = ?", ID)
 	if err != nil {
 		utilities.WriteLog(log, IP, err.Error())
 		return err
@@ -72,7 +74,7 @@ func UpdateItem(data map[string]string, dataint map[string]int, IP string) error
 		return db.Error
 	}
 
-	msg = data["id"] + " berhasil update"
+	msg = strconv.Itoa(ID) + " berhasil update"
 	utilities.WriteLog(log, IP, msg)
 	return nil
 }
@@ -83,7 +85,7 @@ func UpdateItem(data map[string]string, dataint map[string]int, IP string) error
 
 func IsItemExist(query string, val ...interface{}) bool {
 	var item models.Item
-	database.DB.Where(query, val).Last(&item)
+	database.DB.Where(query, val...).Last(&item)
 	return item.ID == 0
 }
 
@@ -91,7 +93,7 @@ func IsItemExist(query string, val ...interface{}) bool {
 
 func GetAnItem(query string, val ...interface{}) (models.Item, error) {
 	var item models.Item
-	db := database.DB.Where(query, val).Last(&item)
+	db := database.DB.Where(query, val...).Last(&item)
 	if db.Error != nil {
 		return item, db.Error
 	}
@@ -102,7 +104,7 @@ func GetAnItem(query string, val ...interface{}) (models.Item, error) {
 
 func GetPartItems(query string, val ...interface{}) ([]models.Item, error) {
 	var items []models.Item
-	db := database.DB.Where(query, val).Find(&items)
+	db := database.DB.Where(query, val...).Find(&items)
 	if db.Error != nil {
 		return nil, db.Error
 	}

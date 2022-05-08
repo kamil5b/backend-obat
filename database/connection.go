@@ -1,7 +1,6 @@
 package database
 
 import (
-	"github.com/kamil5b/backend-template/models"
 	"github.com/kamil5b/backend-template/utilities"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -9,7 +8,7 @@ import (
 
 var DB *gorm.DB
 
-func Connect() {
+func Connect(models ...interface{}) {
 	user := utilities.GoDotEnvVariable("DATABASE_USER")
 	password := utilities.GoDotEnvVariable("DATABASE_PASSWORD")
 	url := utilities.GoDotEnvVariable("DATABASE_URL")
@@ -25,11 +24,5 @@ func Connect() {
 	}
 
 	DB = connection
-	//DO NOT FORGET TO CHANGE THIS
-	connection.AutoMigrate(
-		&models.Item{},
-		&models.Subitem{},
-		&models.User{},
-		&models.Form{},
-	)
+	connection.AutoMigrate(models...)
 }

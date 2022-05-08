@@ -15,6 +15,7 @@ const SecretKey = "314221943871221"
 func RegisterUser(c *fiber.Ctx) error { //POST
 	var data map[string]string
 	/*
+		Email string
 		username : string
 		password : hash
 		role : string
@@ -26,26 +27,63 @@ func RegisterUser(c *fiber.Ctx) error { //POST
 
 	IP := c.IP()
 	log := utilities.GoDotEnvVariable("LOG")
-	if !IsAuthorized(c.Params("auth"), SecretKey) {
-		utilities.WriteLog(log, IP, "unauthorized")
-		c.Status(401)
-		return c.JSON(fiber.Map{
-			"message": "Unauthorized",
-		})
-	}
 	msg := data["username"] + " mendaftar"
 	utilities.WriteLog(log, IP, msg)
 	dataint := utilities.MapStringToInt(data)
-	err := repositories.CreateUser(data, dataint, IP)
+	user, err := repositories.CreateUser(data, dataint, IP)
 	if err != nil {
 		c.Status(400)
 		return c.JSON(fiber.Map{
 			"message": err,
 		})
 	}
-	c.Status(200)
+	user, err = repositories.GetModelUser("ID = ?", user.ID)
+	if err != nil {
+		msg = data["username"] + " " + err.Error()
+		utilities.WriteLog(log, IP, msg)
+		c.Status(400)
+		return c.JSON(fiber.Map{
+			"message": err.Error(),
+		})
+	}
+	jsonClient, err := json.Marshal(user)
+	if err != nil {
+		msg = data["username"] + " " + err.Error()
+		utilities.WriteLog(log, IP, msg)
+		c.Status(400)
+		return c.JSON(fiber.Map{
+			"message": err.Error(),
+		})
+	}
+	claims := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.StandardClaims{
+		Issuer:    string(jsonClient),
+		ExpiresAt: time.Now().Add(time.Hour * 6).Unix(), //6 hours
+	})
+
+	token, err := claims.SignedString([]byte(SecretKey))
+
+	if err != nil {
+		msg = data["username"] + " " + err.Error()
+		utilities.WriteLog(log, IP, msg)
+		c.Status(400)
+		return c.JSON(fiber.Map{
+			"message": err.Error(),
+		})
+	}
+
+	msg = data["username"] + " berhasil register unverified "
+
+	utilities.WriteLog(log, IP, msg)
+
+	// SEND EMAIL.
+	/*
+		url_verif := utilities.GoDotEnvVariable("SERVER_URL") + "/api/verify/" + token
+		utilities.SendEmail(data["email"], "VERIFY", url_verif)
+	*/
+	c.Status(400)
 	return c.JSON(fiber.Map{
 		"message": "success",
+		"token":   token,
 	})
 }
 
@@ -64,17 +102,10 @@ func LoginUser(c *fiber.Ctx) error { //POST
 	}
 	IP := c.IP()
 	log := utilities.GoDotEnvVariable("LOG")
-	if !IsAuthorized(c.Params("auth"), SecretKey) {
-		utilities.WriteLog(log, IP, "unauthorized")
-		c.Status(401)
-		return c.JSON(fiber.Map{
-			"message": "Unauthorized",
-		})
-	}
 	msg := data["username"] + " mencoba untuk login"
 	utilities.WriteLog(log, IP, msg)
 	password := utilities.HashKamil(data["password"])
-	user, err := repositories.GetModelUser("username = ? and password = ?", data["username"], password)
+	user, err := repositories.GetModelUser("username = ? and password = ? and verified", data["username"], password)
 	if err != nil {
 		msg = data["username"] + " " + err.Error()
 		utilities.WriteLog(log, IP, msg)
@@ -96,7 +127,7 @@ func LoginUser(c *fiber.Ctx) error { //POST
 	}
 	claims := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.StandardClaims{
 		Issuer:    string(jsonClient),
-		ExpiresAt: time.Now().Add(time.Hour * 24).Unix(), //1 day
+		ExpiresAt: time.Now().Add(time.Hour * 24).Unix(), //6 hour
 	})
 
 	token, err := claims.SignedString([]byte(SecretKey))
@@ -113,7 +144,7 @@ func LoginUser(c *fiber.Ctx) error { //POST
 
 	msg = data["username"] + " berhasil login sebagai " + user.Role
 	utilities.WriteLog(log, IP, msg)
-	c.Status(400)
+	c.Status(200)
 	return c.JSON(fiber.Map{
 		"message": "success",
 		"sessid":  token,
@@ -122,7 +153,7 @@ func LoginUser(c *fiber.Ctx) error { //POST
 
 func IsAuthorized(cookie, SecretKey string) bool {
 	_, err := repositories.DecodeJWT(cookie, SecretKey)
-	return err != nil
+	return err == nil
 }
 
 /*
