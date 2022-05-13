@@ -10,14 +10,14 @@ import (
 
 //=====POST======
 
-func CreateItem(data map[string]string, dataint map[string]int, IP string) error { //POST
+func CreateBank(data map[string]string, dataint map[string]int, IP string) error { //POST
 
 	log := "history.log"
 	msg := data["name"] + " mendaftar"
 	utilities.WriteLog(log, IP, msg)
-	db := database.DB.Create(&models.Item{
-		Name:        data["name"],
-		Description: data["description"],
+	db := database.DB.Create(&models.Bank{
+		Nomor: uint(dataint["nomor_bank"]),
+		Nama:  data["nama_bank"],
 	})
 	if db.Error != nil {
 		utilities.WriteLog(log, IP, db.Error.Error())
@@ -33,17 +33,17 @@ func CreateItem(data map[string]string, dataint map[string]int, IP string) error
 }
 
 //=====DELETE=====
-func DeleteItem(IP string, ID int) error { //DELETE
+func DeleteBank(IP string, ID int) error { //DELETE
 
 	log := "history.log"
 	msg := strconv.Itoa(ID) + " menghapus"
 	utilities.WriteLog(log, IP, msg)
-	item, err := GetItem("ID = ?", ID)
+	bank, err := GetBank("ID = ?", ID)
 	if err != nil {
 		utilities.WriteLog(log, IP, err.Error())
 		return err
 	}
-	db := database.DB.Delete(&item)
+	db := database.DB.Delete(&bank)
 	if db.Error != nil {
 		utilities.WriteLog(log, IP, db.Error.Error())
 		return db.Error
@@ -55,19 +55,19 @@ func DeleteItem(IP string, ID int) error { //DELETE
 }
 
 //=====UPDATE=====
-func UpdateItem(data map[string]string, dataint map[string]int, IP string, ID int) error { //DELETE
+func UpdateBank(data map[string]string, dataint map[string]int, IP string, ID int) error { //DELETE
 
 	log := "history.log"
 	msg := strconv.Itoa(ID) + " update"
 	utilities.WriteLog(log, IP, msg)
-	item, err := GetItem("ID = ?", ID)
+	bank, err := GetBank("ID = ?", ID)
 	if err != nil {
 		utilities.WriteLog(log, IP, err.Error())
 		return err
 	}
-	db := database.DB.Model(&item).Updates(models.Item{
-		Name:        data["name"],
-		Description: data["description"],
+	db := database.DB.Model(&bank).Updates(models.Bank{
+		Nomor: uint(dataint["nomor_bank"]),
+		Nama:  data["nama_bank"],
 	})
 	if db.Error != nil {
 		utilities.WriteLog(log, IP, db.Error.Error())
@@ -83,41 +83,41 @@ func UpdateItem(data map[string]string, dataint map[string]int, IP string, ID in
 
 //IS EXIST
 
-func IsItemExist(query string, val ...interface{}) bool {
-	var item models.Item
-	database.DB.Where(query, val...).Last(&item)
-	return item.ID != 0
+func IsBankExist(query string, val ...interface{}) bool {
+	var bank models.Bank
+	database.DB.Where(query, val...).Last(&bank)
+	return bank.ID != 0
 }
 
 //GET AN ITEM
 
-func GetItem(query string, val ...interface{}) (models.Item, error) {
-	var item models.Item
-	db := database.DB.Where(query, val...).Last(&item)
+func GetBank(query string, val ...interface{}) (models.Bank, error) {
+	var bank models.Bank
+	db := database.DB.Where(query, val...).Last(&bank)
 	if db.Error != nil {
-		return item, db.Error
+		return bank, db.Error
 	}
-	return item, nil
+	return bank, nil
 }
 
 //ARRAY
 
-func GetItems(query string, val ...interface{}) ([]models.Item, error) {
-	var items []models.Item
-	db := database.DB.Where(query, val...).Find(&items)
+func GetBanks(query string, val ...interface{}) ([]models.Bank, error) {
+	var banks []models.Bank
+	db := database.DB.Where(query, val...).Find(&banks)
 	if db.Error != nil {
 		return nil, db.Error
 	}
-	return items, nil
+	return banks, nil
 }
 
 //ALL ITEMS
 
-func GetAllItems() ([]models.Item, error) {
-	var items []models.Item
-	db := database.DB.Find(&items)
+func GetAllBanks() ([]models.Bank, error) {
+	var banks []models.Bank
+	db := database.DB.Find(&banks)
 	if db.Error != nil {
 		return nil, db.Error
 	}
-	return items, nil
+	return banks, nil
 }

@@ -34,13 +34,13 @@ func CreateUser(data map[string]string, dataint map[string]int, IP string) (mode
 	password := utilities.HashKamil(data["password"])
 	log := "history.log"
 	fmt.Println(data)
-	exist := IsUserExist("username = ? or email = ?", data["username"], data["email"])
+	exist := IsUserExist("nik = ? or email = ?", data["nik"], data["email"])
 	if !exist {
 		/*
 			belum register. Register masukin ke table user hash
 		*/
 		user := models.User{
-			Username: data["username"],
+			NIK:      data["nik"],
 			Name:     data["name"],
 			Password: password,
 			Role:     data["role"],
@@ -48,12 +48,12 @@ func CreateUser(data map[string]string, dataint map[string]int, IP string) (mode
 			Verified: false,
 		}
 		database.DB.Create(&user)
-		msg := data["username"] + " berhasil mendaftar"
+		msg := data["nik"] + " berhasil mendaftar"
 		utilities.WriteLog(log, IP, msg)
 		fmt.Println(user)
 		return user, nil
 	}
-	msg := data["username"] + " telah mendaftar sebelumnya"
+	msg := data["nik"] + " telah mendaftar sebelumnya"
 	utilities.WriteLog(log, IP, msg)
 	return models.User{}, errors.New(msg)
 }
@@ -111,7 +111,7 @@ func UpdateUser(data map[string]string, dataint map[string]int, IP string, ID in
 	}
 	password := utilities.HashKamil(data["password"])
 	db := database.DB.Model(&user).Updates(models.User{
-		Username: data["username"],
+		NIK:      data["nik"],
 		Name:     data["name"],
 		Password: password,
 		Role:     data["role"],

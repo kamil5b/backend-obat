@@ -16,7 +16,7 @@ func RegisterUser(c *fiber.Ctx) error { //POST
 	var data map[string]string
 	/*
 		Email string
-		username : string
+		nik : string
 		password : hash
 		role : string
 	*/
@@ -29,7 +29,7 @@ func RegisterUser(c *fiber.Ctx) error { //POST
 
 	IP := c.IP()
 	log := "history.log"
-	msg := data["username"] + " mendaftar"
+	msg := data["nik"] + " mendaftar"
 	utilities.WriteLog(log, IP, msg)
 	dataint := utilities.MapStringToInt(data)
 	user, err := repositories.CreateUser(data, dataint, IP)
@@ -41,7 +41,7 @@ func RegisterUser(c *fiber.Ctx) error { //POST
 	}
 	user, err = repositories.GetUser("ID = ?", user.ID)
 	if err != nil {
-		msg = data["username"] + " " + err.Error()
+		msg = data["nik"] + " " + err.Error()
 		utilities.WriteLog(log, IP, msg)
 		c.Status(400)
 		return c.JSON(fiber.Map{
@@ -50,7 +50,7 @@ func RegisterUser(c *fiber.Ctx) error { //POST
 	}
 	jsonClient, err := json.Marshal(user)
 	if err != nil {
-		msg = data["username"] + " " + err.Error()
+		msg = data["nik"] + " " + err.Error()
 		utilities.WriteLog(log, IP, msg)
 		c.Status(400)
 		return c.JSON(fiber.Map{
@@ -65,7 +65,7 @@ func RegisterUser(c *fiber.Ctx) error { //POST
 	token, err := claims.SignedString([]byte(SecretKey))
 
 	if err != nil {
-		msg = data["username"] + " " + err.Error()
+		msg = data["nik"] + " " + err.Error()
 		utilities.WriteLog(log, IP, msg)
 		c.Status(400)
 		return c.JSON(fiber.Map{
@@ -73,7 +73,7 @@ func RegisterUser(c *fiber.Ctx) error { //POST
 		})
 	}
 
-	msg = data["username"] + " berhasil register unverified "
+	msg = data["nik"] + " berhasil register unverified "
 
 	utilities.WriteLog(log, IP, msg)
 
@@ -91,11 +91,11 @@ func RegisterUser(c *fiber.Ctx) error { //POST
 
 func LoginUser(c *fiber.Ctx) error { //POST
 	var data map[string]string
-	//var username string
+	//var nik string
 	//IP bisa jadi server frontend atau backend atau client. Target : TRACE IP CLIENT
 	/*
 
-		username : string
+		nik : string
 		password : string
 
 	*/
@@ -106,12 +106,12 @@ func LoginUser(c *fiber.Ctx) error { //POST
 	}
 	IP := c.IP()
 	log := "history.log"
-	msg := data["username"] + " mencoba untuk login"
+	msg := data["nik"] + " mencoba untuk login"
 	utilities.WriteLog(log, IP, msg)
 	password := utilities.HashKamil(data["password"])
-	user, err := repositories.GetUser("username = ? and password = ? and verified", data["username"], password)
+	user, err := repositories.GetUser("nik = ? and password = ? and verified", data["nik"], password)
 	if err != nil {
-		msg = data["username"] + " " + err.Error()
+		msg = data["nik"] + " " + err.Error()
 		utilities.WriteLog(log, IP, msg)
 		c.Status(400)
 		return c.JSON(fiber.Map{
@@ -121,7 +121,7 @@ func LoginUser(c *fiber.Ctx) error { //POST
 	}
 	jsonClient, err := json.Marshal(user)
 	if err != nil {
-		msg = data["username"] + " " + err.Error()
+		msg = data["nik"] + " " + err.Error()
 		utilities.WriteLog(log, IP, msg)
 		c.Status(400)
 		return c.JSON(fiber.Map{
@@ -137,7 +137,7 @@ func LoginUser(c *fiber.Ctx) error { //POST
 	token, err := claims.SignedString([]byte(SecretKey))
 
 	if err != nil {
-		msg = data["username"] + " " + err.Error()
+		msg = data["nik"] + " " + err.Error()
 		utilities.WriteLog(log, IP, msg)
 		c.Status(400)
 		return c.JSON(fiber.Map{
@@ -146,7 +146,7 @@ func LoginUser(c *fiber.Ctx) error { //POST
 		})
 	}
 
-	msg = data["username"] + " berhasil login sebagai " + user.Role
+	msg = data["nik"] + " berhasil login sebagai " + user.Role
 	utilities.WriteLog(log, IP, msg)
 	c.Status(200)
 	return c.JSON(fiber.Map{
@@ -171,21 +171,21 @@ func Login(data map[string]string, dataint map[string]int, IP string, SecretKey 
 			"message": "Unauthorized",
 		})
 	}
-	msg := data["username"] + " mencoba untuk login"
+	msg := data["nik"] + " mencoba untuk login"
 	utilities.WriteLog(log, IP, msg)
 	password := utilities.HashKamil(data["password"])
-	exist := IsUserExist("username = ? and password = ?", data["username"], password)
+	exist := IsUserExist("nik = ? and password = ?", data["nik"], password)
 	if !exist {
-		msg = data["username"] + " belum mendaftar"
+		msg = data["nik"] + " belum mendaftar"
 		utilities.WriteLog(log, IP, msg)
 		return fiber.Map{
 			"message": msg,
 			"sessid":  nil,
 		}, 400
 	}
-	user, err := GetAUser("username = ? and password = ?", data["username"], password)
+	user, err := GetAUser("nik = ? and password = ?", data["nik"], password)
 	if err != nil {
-		msg = data["username"] + " " + err.Error()
+		msg = data["nik"] + " " + err.Error()
 		utilities.WriteLog(log, IP, msg)
 		return fiber.Map{
 			"message": err.Error(),
@@ -194,7 +194,7 @@ func Login(data map[string]string, dataint map[string]int, IP string, SecretKey 
 	}
 	jsonClient, err := json.Marshal(user)
 	if err != nil {
-		msg = data["username"] + " " + err.Error()
+		msg = data["nik"] + " " + err.Error()
 		utilities.WriteLog(log, IP, msg)
 		return fiber.Map{
 			"message": err.Error(),
@@ -209,7 +209,7 @@ func Login(data map[string]string, dataint map[string]int, IP string, SecretKey 
 	token, err := claims.SignedString([]byte(SecretKey))
 
 	if err != nil {
-		msg = data["username"] + " " + err.Error()
+		msg = data["nik"] + " " + err.Error()
 		utilities.WriteLog(log, IP, msg)
 		return fiber.Map{
 			"message": err.Error(),
@@ -217,7 +217,7 @@ func Login(data map[string]string, dataint map[string]int, IP string, SecretKey 
 		}, 400
 	}
 
-	msg = data["username"] + " berhasil login sebagai " + user.Role
+	msg = data["nik"] + " berhasil login sebagai " + user.Role
 	utilities.WriteLog(log, IP, msg)
 	return fiber.Map{
 		"message": "success",
